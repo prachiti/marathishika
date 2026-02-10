@@ -1,0 +1,38 @@
+{
+  "name": "मराठी शिका - Learn Marathi",
+  "short_name": "मराठी शिका",
+  "description": "Learn Marathi from alphabets to conversations with interactive lessons and quizzes",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#58CC02",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["education", "learning"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%2358CC02' rx='40'/><text x='96' y='140' font-size='100' text-anchor='middle' fill='white'>🦉</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%2358CC02' rx='100'/><text x='256' y='380' font-size='280' text-anchor='middle' fill='white'>🦉</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 844'><rect width='390' height='844' fill='%23667eea'/><text x='195' y='422' font-size='80' text-anchor='middle' fill='white'>मराठी शिका</text></svg>",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "label": "Learn Marathi Screen"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

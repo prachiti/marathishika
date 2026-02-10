@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>मराठी शिका - Learn Marathi</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Learn Marathi from alphabets to conversations with interactive lessons and quizzes">
+    <meta name="theme-color" content="#58CC02">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="मराठी शिका">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%2358CC02'/><text x='256' y='380' font-size='280' text-anchor='middle' fill='white'>🦉</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🦉</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #58CC02;
+            --primary-hover: #4CAD02;
+            --secondary: #1CB0F6;
+            --error: #FF4B4B;
+            --warning: #FFC800;
+            --success: #58CC02;
+            --locked: #E5E5E5;
+            --bg: #FFFFFF;
+            --text-dark: #3C3C3C;
+            --text-light: #777777;
+            --border: #E5E5E5;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(180deg, #F7F9FA 0%, #FFFFFF 100%);
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        .devanagari {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .stat-icon {
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Progress Overview */
+        .progress-overview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .progress-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .progress-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .progress-stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .progress-stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .progress-stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Lesson Path */
+        .lesson-path {
+            position: relative;
+        }
+
+        .path-line {
+            display: none; /* Hidden - was distracting */
+        }
+
+        .lesson-unit {
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .unit-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .unit-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .unit-description {
+            font-size: 16px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Lesson Items */
+        .lessons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .lesson-item {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .lesson-item:nth-child(even) {
+            margin-left: auto;
+        }
+
+        .lesson-item:nth-child(odd) {
+            margin-right: auto;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .lesson-button {
+            width: 100%;
+            background: white;
+            border: 4px solid var(--border);
+            border-radius: 20px;
+            padding: 20px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .lesson-button:hover:not(.locked):not(.current) {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .lesson-button.completed {
+            border-color: var(--success);
+            background: linear-gradient(135deg, rgba(88, 204, 2, 0.05), rgba(88, 204, 2, 0.02));
+        }
+
+        .lesson-button.current {
+            border-color: var(--secondary);
+            background: linear-gradient(135deg, rgba(28, 176, 246, 0.1), rgba(28, 176, 246, 0.05));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: var(--shadow);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(28, 176, 246, 0.2), var(--shadow);
+            }
+        }
+
+        .lesson-button.locked {
+            border-color: var(--locked);
+            background: #F9F9F9;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .lesson-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            flex-shrink: 0;
+            background: var(--locked);
+            position: relative;
+        }
+
+        .lesson-button.completed .lesson-icon {
+            background: linear-gradient(135deg, var(--success), #4CAD02);
+        }
+
+        .lesson-button.current .lesson-icon {
+            background: linear-gradient(135deg, var(--secondary), #1899D6);
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+        .lesson-button.locked .lesson-icon {
+            background: var(--locked);
+        }
+
+        .lesson-content {
+            flex: 1;
+        }
+
+        .lesson-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .lesson-description {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .lesson-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar-mini {
+            flex: 1;
+            height: 6px;
+            background: #E5E5E5;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #4CAD02);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .lesson-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--warning);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Quiz Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+            margin: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #F0F0F0;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: #E0E0E0;
+            transform: rotate(90deg);
+        }
+
+        /* Quiz Screens */
+        .quiz-screen {
+            display: none;
+        }
+
+        .quiz-screen.active {
+            display: block;
+        }
+
+        /* Intro Screen */
+        .intro-screen {
+            text-align: center;
+        }
+
+        .intro-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+
+        .intro-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+        }
+
+        .intro-description {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .intro-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .intro-stat {
+            background: #F7F9FA;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .intro-stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .intro-stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        /* Question Screen */
+        .quiz-header {
+            margin-bottom: 30px;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-counter {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .quiz-score {
+            display: flex;
+            gap: 15px;
+        }
+
+        .hearts {
+            color: var(--error);
+            font-size: 20px;
+        }
+
+        .progress-bar-quiz {
+            height: 12px;
+            background: #E5E5E5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-quiz-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #4CAD02);
+            transition: width 0.3s ease;
+        }
+
+        .question-content {
+            margin-bottom: 30px;
+        }
+
+        .question-type {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .question-text {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .question-help {
+            font-size: 15px;
+            color: var(--text-light);
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Options */
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .options-container.single-column {
+            grid-template-columns: 1fr;
+        }
+
+        .option-button {
+            padding: 18px;
+            border: 3px solid var(--border);
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-button:hover:not(:disabled) {
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .option-button.selected {
+            border-color: var(--secondary);
+            background: rgba(28, 176, 246, 0.1);
+        }
+
+        .option-button.correct {
+            border-color: var(--success);
+            background: rgba(88, 204, 2, 0.1);
+            animation: correctPulse 0.5s ease;
+        }
+
+        .option-button.wrong {
+            border-color: var(--error);
+            background: rgba(255, 75, 75, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        .option-button:disabled {
+            cursor: not-allowed;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Buttons */
+        .quiz-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 16px 36px;
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 0 #4CAD02;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #4CAD02;
+        }
+
+        .btn-primary:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #4CAD02;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-dark);
+            border: 3px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+
+        /* Results Screen */
+        .results-screen {
+            text-align: center;
+        }
+
+        .results-icon {
+            font-size: 100px;
+            margin-bottom: 20px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        .results-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .results-message {
+            font-size: 17px;
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .result-stat-card {
+            background: #F7F9FA;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .result-stat-value {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .result-stat-label {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .xp-earned {
+            background: linear-gradient(135deg, #FFD93D 0%, #FFC107 100%);
+            padding: 18px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .xp-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .lesson-item:nth-child(even),
+            .lesson-item:nth-child(odd) {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-stats,
+            .intro-stats,
+            .results-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .unit-title {
+                font-size: 22px;
+            }
+
+            .modal-content {
+                padding: 25px;
+            }
+
+            .question-text {
+                font-size: 36px;
+            }
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Profile Screen */
+        .profile-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .profile-container {
+            background: white;
+            border-radius: 30px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: var(--shadow-hover);
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-logo {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .profile-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .profile-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+        }
+
+        .profiles-list {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 25px;
+            border: 3px solid var(--border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .profile-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .profile-card-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .profile-stats {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .profile-delete {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            background: #F0F0F0;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-delete:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-add-profile {
+            width: 100%;
+            padding: 18px;
+            border: 3px dashed var(--border);
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-profile:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(88, 204, 2, 0.05);
+        }
+
+        .add-profile-form {
+            margin-top: 20px;
+            padding: 20px;
+            background: #F7F9FA;
+            border-radius: 15px;
+        }
+
+        .profile-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .profile-form-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-form-actions .btn {
+            flex: 1;
+        }
+
+        /* PWA Install Banner */
+        .install-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 3000;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .install-banner-icon {
+            font-size: 40px;
+        }
+
+        .install-banner-content {
+            flex: 1;
+        }
+
+        .install-banner-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .install-banner-text {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .install-banner-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-banner-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .install-banner-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .install-banner-btn.secondary {
+            background: #F0F0F0;
+            color: var(--text-dark);
+        }
+
+        .install-banner-close {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: #F0F0F0;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Confetti */
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            animation: confetti-fall 3s linear;
+        }
+    </style>
+</head>
+<body>
+    <!-- User Profile Screen -->
+    <div id="profileScreen" class="profile-screen">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-logo">🦉</div>
+                <h1 class="profile-title">मराठी शिका</h1>
+                <p class="profile-subtitle">Who's learning today?</p>
+            </div>
+
+            <div id="profilesList" class="profiles-list"></div>
+
+            <button class="btn-add-profile" onclick="showAddProfile()" id="addProfileBtn">
+                <span style="font-size: 24px;">+</span>
+                <span>Add New User</span>
+            </button>
+
+            <div id="addProfileForm" class="add-profile-form hidden">
+                <input type="text" id="newProfileName" placeholder="Enter name (e.g. Raj, Priya)" maxlength="20" class="profile-input">
+                <div class="profile-form-actions">
+                    <button class="btn btn-primary" onclick="createProfile()">Create</button>
+                    <button class="btn btn-secondary" onclick="cancelAddProfile()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Banner -->
+    <div id="installBanner" class="install-banner hidden">
+        <div class="install-banner-icon">📱</div>
+        <div class="install-banner-content">
+            <div class="install-banner-title">Install App</div>
+            <div class="install-banner-text">Add to home screen for better experience</div>
+        </div>
+        <div class="install-banner-actions">
+            <button class="install-banner-btn primary" onclick="installApp()">Install</button>
+            <button class="install-banner-btn secondary" onclick="closeInstallBanner()">Later</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header" id="mainHeader" style="display: none;">
+        <div class="header-content">
+            <div class="logo">
+                <span>🦉</span>
+                <span>मराठी शिका</span>
+                <span style="font-size: 14px; color: var(--text-light); margin-left: 10px;" id="currentUserName"></span>
+            </div>
+            <div class="user-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-value" id="streakCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value" id="xpCount">0</span>
+                </div>
+                <button onclick="switchUser()" style="margin-left: 20px; padding: 8px 16px; border: 2px solid var(--border); background: white; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease;">
+                    Switch User
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer" style="display: none;">
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+            <div class="progress-title">Your Learning Journey</div>
+            <div class="progress-subtitle">From alphabets to conversations - master Marathi step by step!</div>
+            <div class="progress-stats">
+                <div class="progress-stat-card">
+                    <div class="progress-stat-value" id="completedLessons">0</div>
+                    <div class="progress-stat-label">Lessons Completed</div>
+                </div>
+                <div class="progress-stat-card">
+                    <div class="progress-stat-value" id="totalXP">0</div>
+                    <div class="progress-stat-label">Total XP</div>
+                </div>
+                <div class="progress-stat-card">
+                    <div class="progress-stat-value" id="accuracy">0%</div>
+                    <div class="progress-stat-label">Accuracy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Path -->
+        <div class="lesson-path">
+            <div class="path-line"></div>
+            <div id="lessonsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div class="modal" id="quizModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeQuiz()">×</button>
+
+            <!-- Intro Screen -->
+            <div class="quiz-screen active" id="introScreen">
+                <div class="intro-screen">
+                    <div class="intro-icon" id="lessonIconLarge"></div>
+                    <div class="intro-title" id="lessonTitleLarge"></div>
+                    <div class="intro-description" id="lessonDescriptionLarge"></div>
+                    <div class="intro-stats">
+                        <div class="intro-stat">
+                            <div class="intro-stat-value" id="questionCount">12</div>
+                            <div class="intro-stat-label">Questions</div>
+                        </div>
+                        <div class="intro-stat">
+                            <div class="intro-stat-value">+60</div>
+                            <div class="intro-stat-label">XP to Earn</div>
+                        </div>
+                        <div class="intro-stat">
+                            <div class="intro-stat-value">~5</div>
+                            <div class="intro-stat-label">Minutes</div>
+                        </div>
+                    </div>
+                    <div class="quiz-actions">
+                        <button class="btn btn-primary" onclick="startQuiz()">START LESSON</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Screen -->
+            <div class="quiz-screen" id="questionScreen">
+                <div class="quiz-header">
+                    <div class="quiz-progress">
+                        <div class="question-counter">
+                            Question <span id="currentQuestionNum">1</span> / <span id="totalQuestions">12</span>
+                        </div>
+                        <div class="quiz-score">
+                            <div class="score-item hearts">
+                                <span id="heartsDisplay">❤️❤️❤️</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-bar-quiz">
+                        <div class="progress-bar-quiz-fill" id="quizProgressBar"></div>
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <div class="question-type" id="questionType">TRANSLATE THIS</div>
+                    <div class="question-text" id="questionText"></div>
+                    <div class="question-help" id="questionHelp"></div>
+                </div>
+
+                <div class="options-container" id="optionsContainer"></div>
+
+                <div class="quiz-actions">
+                    <button class="btn btn-primary" id="checkButton" onclick="checkAnswer()" disabled>CHECK</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="quiz-screen" id="resultsScreen">
+                <div class="results-screen">
+                    <div class="results-icon" id="resultsIcon">🎉</div>
+                    <div class="results-title" id="resultsTitle">Lesson Complete!</div>
+                    <div class="results-message" id="resultsMessage">Great job!</div>
+
+                    <div class="xp-earned">
+                        <div class="xp-text">+<span id="xpEarned">60</span> XP</div>
+                    </div>
+
+                    <div class="results-stats">
+                        <div class="result-stat-card">
+                            <div class="result-stat-value"><span id="finalScore">100</span>%</div>
+                            <div class="result-stat-label">Accuracy</div>
+                        </div>
+                        <div class="result-stat-card">
+                            <div class="result-stat-value" id="correctAnswers">12</div>
+                            <div class="result-stat-label">Correct</div>
+                        </div>
+                        <div class="result-stat-card">
+                            <div class="result-stat-value" id="wrongAnswers">0</div>
+                            <div class="result-stat-label">Mistakes</div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-actions">
+                        <button class="btn btn-primary" onclick="continueToNext()">CONTINUE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Multi-User Profile System
+        let allProfiles = {};
+        let currentProfile = null;
+
+        // Load all profiles
+        function loadAllProfiles() {
+            const saved = localStorage.getItem('marathiAllProfiles');
+            if (saved) {
+                allProfiles = JSON.parse(saved);
+            }
+            renderProfilesList();
+        }
+
+        // Save all profiles
+        function saveAllProfiles() {
+            localStorage.setItem('marathiAllProfiles', JSON.stringify(allProfiles));
+        }
+
+        // Render profiles list
+        function renderProfilesList() {
+            const container = document.getElementById('profilesList');
+            container.innerHTML = '';
+
+            const profileNames = Object.keys(allProfiles);
+            
+            if (profileNames.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-light); padding: 20px;">No users yet. Create your first profile!</p>';
+                return;
+            }
+
+            profileNames.forEach(name => {
+                const profile = allProfiles[name];
+                const initial = name.charAt(0).toUpperCase();
+                
+                const card = document.createElement('div');
+                card.className = 'profile-card';
+                card.innerHTML = `
+                    <div class="profile-card-content" onclick="selectProfile('${name}')">
+                        <div class="profile-avatar">${initial}</div>
+                        <div class="profile-info">
+                            <div class="profile-name">${name}</div>
+                            <div class="profile-stats">⭐ ${profile.totalXP} XP • 📚 ${profile.completedLessons.length} lessons</div>
+                        </div>
+                    </div>
+                    <button class="profile-delete" onclick="deleteProfile('${name}', event)" title="Delete user">🗑️</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Show add profile form
+        function showAddProfile() {
+            document.getElementById('addProfileForm').classList.remove('hidden');
+            document.getElementById('addProfileBtn').style.display = 'none';
+            document.getElementById('newProfileName').focus();
+        }
+
+        // Cancel add profile
+        function cancelAddProfile() {
+            document.getElementById('addProfileForm').classList.add('hidden');
+            document.getElementById('addProfileBtn').style.display = 'flex';
+            document.getElementById('newProfileName').value = '';
+        }
+
+        // Create new profile
+        function createProfile() {
+            const nameInput = document.getElementById('newProfileName');
+            const name = nameInput.value.trim();
+
+            if (!name) {
+                alert('Please enter a name!');
+                return;
+            }
+
+            if (allProfiles[name]) {
+                alert('This name already exists! Please choose a different name.');
+                return;
+            }
+
+            // Create new profile with default progress
+            allProfiles[name] = {
+                completedLessons: [],
+                currentLesson: 1,
+                totalXP: 0,
+                streak: 0,
+                accuracy: []
+            };
+
+            saveAllProfiles();
+            cancelAddProfile();
+            renderProfilesList();
+        }
+
+        // Select profile
+        function selectProfile(name) {
+            currentProfile = name;
+            userProgress = allProfiles[name];
+            
+            // Hide profile screen, show main app
+            document.getElementById('profileScreen').style.display = 'none';
+            document.getElementById('mainHeader').style.display = 'block';
+            document.getElementById('mainContainer').style.display = 'block';
+            document.getElementById('currentUserName').textContent = `(${name})`;
+            
+            updateHeader();
+            updateProgressOverview();
+            renderLessons();
+        }
+
+        // Switch user
+        function switchUser() {
+            if (confirm('Switch to a different user?')) {
+                // Save current progress
+                if (currentProfile) {
+                    allProfiles[currentProfile] = userProgress;
+                    saveAllProfiles();
+                }
+                
+                // Show profile screen
+                document.getElementById('profileScreen').style.display = 'flex';
+                document.getElementById('mainHeader').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'none';
+                
+                currentProfile = null;
+                renderProfilesList();
+            }
+        }
+
+        // Delete profile
+        function deleteProfile(name, event) {
+            event.stopPropagation();
+            
+            if (confirm(`Delete ${name}'s progress? This cannot be undone!`)) {
+                delete allProfiles[name];
+                saveAllProfiles();
+                renderProfilesList();
+            }
+        }
+
+        // Override save progress to save to current profile
+        function saveProgress() {
+            if (currentProfile) {
+                allProfiles[currentProfile] = userProgress;
+                saveAllProfiles();
+            }
+            updateHeader();
+            updateProgressOverview();
+        }
+
+        // Complete Lesson Data with Alphabets and Word Formation
+        const lessonData = [
+            {
+                unit: 0,
+                unitTitle: "Unit 0: The Alphabet",
+                unitDescription: "Master the Marathi script from scratch",
+                lessons: [
+                    {
+                        id: 1,
+                        title: "Vowels (स्वर)",
+                        description: "Learn the 12 Marathi vowels",
+                        icon: "अ",
+                        vocab: [
+                            { marathi: 'अ', english: 'a', romanization: 'a (like u in but)' },
+                            { marathi: 'आ', english: 'ā', romanization: 'ā (like a in father)' },
+                            { marathi: 'इ', english: 'i', romanization: 'i (like i in sit)' },
+                            { marathi: 'ई', english: 'ī', romanization: 'ī (like ee in see)' },
+                            { marathi: 'उ', english: 'u', romanization: 'u (like u in put)' },
+                            { marathi: 'ऊ', english: 'ū', romanization: 'ū (like oo in boot)' },
+                            { marathi: 'ए', english: 'e', romanization: 'e (like e in bed)' },
+                            { marathi: 'ऐ', english: 'ai', romanization: 'ai (like ai in Thailand)' },
+                            { marathi: 'ओ', english: 'o', romanization: 'o (like o in go)' },
+                            { marathi: 'औ', english: 'au', romanization: 'au (like ow in cow)' }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        title: "Consonants Part 1",
+                        description: "Velar, palatal & retroflex",
+                        icon: "क",
+                        vocab: [
+                            { marathi: 'क', english: 'ka', romanization: 'ka (like k in kite)' },
+                            { marathi: 'ख', english: 'kha', romanization: 'kha (aspirated k)' },
+                            { marathi: 'ग', english: 'ga', romanization: 'ga (like g in go)' },
+                            { marathi: 'घ', english: 'gha', romanization: 'gha (aspirated g)' },
+                            { marathi: 'च', english: 'cha', romanization: 'cha (like ch in chair)' },
+                            { marathi: 'छ', english: 'chha', romanization: 'chha (aspirated ch)' },
+                            { marathi: 'ज', english: 'ja', romanization: 'ja (like j in jump)' },
+                            { marathi: 'झ', english: 'jha', romanization: 'jha (aspirated j)' },
+                            { marathi: 'ट', english: 'ṭa', romanization: 'ṭa (retroflex t)' },
+                            { marathi: 'ठ', english: 'ṭha', romanization: 'ṭha (aspirated retroflex t)' }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        title: "Consonants Part 2",
+                        description: "Dental & labial consonants",
+                        icon: "त",
+                        vocab: [
+                            { marathi: 'त', english: 'ta', romanization: 'ta (dental t)' },
+                            { marathi: 'थ', english: 'tha', romanization: 'tha (aspirated dental t)' },
+                            { marathi: 'द', english: 'da', romanization: 'da (dental d)' },
+                            { marathi: 'ध', english: 'dha', romanization: 'dha (aspirated d)' },
+                            { marathi: 'न', english: 'na', romanization: 'na (dental n)' },
+                            { marathi: 'प', english: 'pa', romanization: 'pa (like p in pen)' },
+                            { marathi: 'फ', english: 'pha', romanization: 'pha (aspirated p)' },
+                            { marathi: 'ब', english: 'ba', romanization: 'ba (like b in bat)' },
+                            { marathi: 'भ', english: 'bha', romanization: 'bha (aspirated b)' },
+                            { marathi: 'म', english: 'ma', romanization: 'ma (like m in mat)' }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        title: "More Consonants",
+                        description: "Semi-vowels & sibilants",
+                        icon: "य",
+                        vocab: [
+                            { marathi: 'य', english: 'ya', romanization: 'ya (like y in yes)' },
+                            { marathi: 'र', english: 'ra', romanization: 'ra (rolled r)' },
+                            { marathi: 'ल', english: 'la', romanization: 'la (like l in love)' },
+                            { marathi: 'व', english: 'va', romanization: 'va (like v in van)' },
+                            { marathi: 'श', english: 'sha', romanization: 'sha (like sh in ship)' },
+                            { marathi: 'ष', english: 'ṣha', romanization: 'ṣha (retroflex sh)' },
+                            { marathi: 'स', english: 'sa', romanization: 'sa (like s in sun)' },
+                            { marathi: 'ह', english: 'ha', romanization: 'ha (like h in hat)' },
+                            { marathi: 'ळ', english: 'ḷa', romanization: 'ḷa (retroflex l)' }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        title: "Vowel Marks (मात्रा)",
+                        description: "Learn how vowels modify consonants",
+                        icon: "◌ा",
+                        vocab: [
+                            { marathi: 'क', english: 'ka', romanization: 'क (k + अ)' },
+                            { marathi: 'का', english: 'kā', romanization: 'का (k + आ)' },
+                            { marathi: 'कि', english: 'ki', romanization: 'कि (k + इ)' },
+                            { marathi: 'की', english: 'kī', romanization: 'की (k + ई)' },
+                            { marathi: 'कु', english: 'ku', romanization: 'कु (k + उ)' },
+                            { marathi: 'कू', english: 'kū', romanization: 'कू (k + ऊ)' },
+                            { marathi: 'के', english: 'ke', romanization: 'के (k + ए)' },
+                            { marathi: 'कै', english: 'kai', romanization: 'कै (k + ऐ)' },
+                            { marathi: 'को', english: 'ko', romanization: 'को (k + ओ)' },
+                            { marathi: 'कौ', english: 'kau', romanization: 'कौ (k + औ)' }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        title: "Simple Words",
+                        description: "Your first Marathi words!",
+                        icon: "✍️",
+                        vocab: [
+                            { marathi: 'मी', english: 'I', romanization: 'mī' },
+                            { marathi: 'तू', english: 'You', romanization: 'tū' },
+                            { marathi: 'घर', english: 'House', romanization: 'ghar' },
+                            { marathi: 'पाणी', english: 'Water', romanization: 'pāṇī' },
+                            { marathi: 'नाव', english: 'Name', romanization: 'nāv' },
+                            { marathi: 'एक', english: 'One', romanization: 'ek' },
+                            { marathi: 'दोन', english: 'Two', romanization: 'don' },
+                            { marathi: 'आम', english: 'Mango', romanization: 'ām' }
+                        ]
+                    }
+                ]
+            },
+            {
+                unit: 1,
+                unitTitle: "Unit 1: Foundation",
+                unitDescription: "Essential words and phrases",
+                lessons: [
+                    {
+                        id: 7,
+                        title: "Basic Greetings",
+                        description: "Say hello and thank you",
+                        icon: "👋",
+                        vocab: [
+                            { marathi: 'नमस्कार', english: 'Hello', romanization: 'Namaskār' },
+                            { marathi: 'धन्यवाद', english: 'Thank you', romanization: 'Dhanyavād' },
+                            { marathi: 'कृपया', english: 'Please', romanization: 'Kṛpayā' },
+                            { marathi: 'माफ करा', english: 'Sorry', romanization: 'Māph karā' },
+                            { marathi: 'हो', english: 'Yes', romanization: 'Ho' },
+                            { marathi: 'नाही', english: 'No', romanization: 'Nāhī' },
+                            { marathi: 'सुप्रभात', english: 'Good morning', romanization: 'Suprabhāt' },
+                            { marathi: 'शुभ रात्री', english: 'Good night', romanization: 'Śubh Rātrī' },
+                            { marathi: 'छान', english: 'Good/Nice', romanization: 'Chhān' },
+                            { marathi: 'बरं', english: 'Okay', romanization: 'Baraṃ' }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        title: "Numbers 1-10",
+                        description: "Count to ten",
+                        icon: "🔢",
+                        vocab: [
+                            { marathi: 'एक', english: 'One', romanization: 'Ek' },
+                            { marathi: 'दोन', english: 'Two', romanization: 'Don' },
+                            { marathi: 'तीन', english: 'Three', romanization: 'Tīn' },
+                            { marathi: 'चार', english: 'Four', romanization: 'Chār' },
+                            { marathi: 'पाच', english: 'Five', romanization: 'Pāch' },
+                            { marathi: 'सहा', english: 'Six', romanization: 'Sahā' },
+                            { marathi: 'सात', english: 'Seven', romanization: 'Sāt' },
+                            { marathi: 'आठ', english: 'Eight', romanization: 'Āṭh' },
+                            { marathi: 'नऊ', english: 'Nine', romanization: 'Naū' },
+                            { marathi: 'दहा', english: 'Ten', romanization: 'Dahā' }
+                        ]
+                    },
+                    {
+                        id: 9,
+                        title: "Personal Pronouns",
+                        description: "I, you, we, they",
+                        icon: "👤",
+                        vocab: [
+                            { marathi: 'मी', english: 'I', romanization: 'Mī' },
+                            { marathi: 'तू', english: 'You (informal)', romanization: 'Tū' },
+                            { marathi: 'तुम्ही', english: 'You (formal)', romanization: 'Tumhī' },
+                            { marathi: 'आम्ही', english: 'We', romanization: 'Āmhī' },
+                            { marathi: 'तो', english: 'He', romanization: 'To' },
+                            { marathi: 'ती', english: 'She', romanization: 'Tī' },
+                            { marathi: 'आहे', english: 'Is/Am/Are', romanization: 'Āhe' },
+                            { marathi: 'नाव', english: 'Name', romanization: 'Nāv' },
+                            { marathi: 'माझे', english: 'My', romanization: 'Mājhe' },
+                            { marathi: 'तुमचे', english: 'Your', romanization: 'Tumche' }
+                        ]
+                    }
+                ]
+            },
+            {
+                unit: 2,
+                unitTitle: "Unit 2: Family & People",
+                unitDescription: "Talk about your family",
+                lessons: [
+                    {
+                        id: 10,
+                        title: "Family Members",
+                        description: "Parents, siblings, grandparents",
+                        icon: "👨‍👩‍👧‍👦",
+                        vocab: [
+                            { marathi: 'आई', english: 'Mother', romanization: 'Āī' },
+                            { marathi: 'बाबा', english: 'Father', romanization: 'Bābā' },
+                            { marathi: 'भाऊ', english: 'Brother', romanization: 'Bhāū' },
+                            { marathi: 'बहीण', english: 'Sister', romanization: 'Bahīṇ' },
+                            { marathi: 'आजी', english: 'Grandmother', romanization: 'Ājī' },
+                            { marathi: 'आजोबा', english: 'Grandfather', romanization: 'Ājobā' },
+                            { marathi: 'मुलगा', english: 'Son/Boy', romanization: 'Mulgā' },
+                            { marathi: 'मुलगी', english: 'Daughter/Girl', romanization: 'Mulgī' },
+                            { marathi: 'कुटुंब', english: 'Family', romanization: 'Kuṭumb' },
+                            { marathi: 'घर', english: 'Home', romanization: 'Ghar' }
+                        ]
+                    },
+                    {
+                        id: 11,
+                        title: "Extended Family",
+                        description: "Uncles, aunts, cousins",
+                        icon: "👪",
+                        vocab: [
+                            { marathi: 'काका', english: 'Uncle (father\'s brother)', romanization: 'Kākā' },
+                            { marathi: 'काकी', english: 'Aunt (uncle\'s wife)', romanization: 'Kākī' },
+                            { marathi: 'मामा', english: 'Uncle (mother\'s brother)', romanization: 'Māmā' },
+                            { marathi: 'मावशी', english: 'Aunt (mother\'s sister)', romanization: 'Māvaśī' },
+                            { marathi: 'लहान', english: 'Small/Young', romanization: 'Lahān' },
+                            { marathi: 'मोठा', english: 'Big/Elder', romanization: 'Moṭhā' },
+                            { marathi: 'प्रेम', english: 'Love', romanization: 'Prem' },
+                            { marathi: 'आवडणे', english: 'To like', romanization: 'Āvaḍaṇe' }
+                        ]
+                    }
+                ]
+            },
+            {
+                unit: 3,
+                unitTitle: "Unit 3: Everyday Life",
+                unitDescription: "Colors, objects, food, and actions",
+                lessons: [
+                    {
+                        id: 12,
+                        title: "Colors",
+                        description: "Basic color vocabulary",
+                        icon: "🎨",
+                        vocab: [
+                            { marathi: 'लाल', english: 'Red', romanization: 'Lāl' },
+                            { marathi: 'निळा', english: 'Blue', romanization: 'Niḷā' },
+                            { marathi: 'हिरवा', english: 'Green', romanization: 'Hiravā' },
+                            { marathi: 'पिवळा', english: 'Yellow', romanization: 'Pivaḷā' },
+                            { marathi: 'काळा', english: 'Black', romanization: 'Kāḷā' },
+                            { marathi: 'पांढरा', english: 'White', romanization: 'Pāṇḍharā' },
+                            { marathi: 'गुलाबी', english: 'Pink', romanization: 'Gulābī' },
+                            { marathi: 'केशरी', english: 'Orange', romanization: 'Keśarī' },
+                            { marathi: 'तपकिरी', english: 'Brown', romanization: 'Tapkirī' },
+                            { marathi: 'जांभळा', english: 'Purple', romanization: 'Jāmbhaḷā' }
+                        ]
+                    },
+                    {
+                        id: 13,
+                        title: "Common Objects",
+                        description: "Things you see daily",
+                        icon: "📦",
+                        vocab: [
+                            { marathi: 'पुस्तक', english: 'Book', romanization: 'Pustak' },
+                            { marathi: 'खुर्ची', english: 'Chair', romanization: 'Khurchī' },
+                            { marathi: 'टेबल', english: 'Table', romanization: 'Ṭebal' },
+                            { marathi: 'दरवाजा', english: 'Door', romanization: 'Darvājā' },
+                            { marathi: 'पेन', english: 'Pen', romanization: 'Pen' },
+                            { marathi: 'बॅग', english: 'Bag', romanization: 'Bĕg' },
+                            { marathi: 'पाणी', english: 'Water', romanization: 'Pāṇī' },
+                            { marathi: 'मोबाईल', english: 'Mobile phone', romanization: 'Mobāīl' }
+                        ]
+                    },
+                    {
+                        id: 14,
+                        title: "Food & Drinks",
+                        description: "What do you eat?",
+                        icon: "🍽️",
+                        vocab: [
+                            { marathi: 'भात', english: 'Rice', romanization: 'Bhāt' },
+                            { marathi: 'रोटी', english: 'Bread', romanization: 'Roṭī' },
+                            { marathi: 'दूध', english: 'Milk', romanization: 'Dūdh' },
+                            { marathi: 'चहा', english: 'Tea', romanization: 'Chahā' },
+                            { marathi: 'फळ', english: 'Fruit', romanization: 'Phaḷ' },
+                            { marathi: 'भाजी', english: 'Vegetable', romanization: 'Bhājī' },
+                            { marathi: 'केळी', english: 'Banana', romanization: 'Keḷī' },
+                            { marathi: 'सफरचंद', english: 'Apple', romanization: 'Safarachand' },
+                            { marathi: 'नाश्ता', english: 'Breakfast', romanization: 'Nāśtā' },
+                            { marathi: 'जेवण', english: 'Lunch/Dinner', romanization: 'Jevaṇ' }
+                        ]
+                    },
+                    {
+                        id: 15,
+                        title: "Common Verbs",
+                        description: "Action words",
+                        icon: "🏃",
+                        vocab: [
+                            { marathi: 'खाणे', english: 'To eat', romanization: 'Khāṇe' },
+                            { marathi: 'पिणे', english: 'To drink', romanization: 'Piṇe' },
+                            { marathi: 'जाणे', english: 'To go', romanization: 'Jāṇe' },
+                            { marathi: 'येणे', english: 'To come', romanization: 'Yeṇe' },
+                            { marathi: 'बोलणे', english: 'To speak', romanization: 'Bolaṇe' },
+                            { marathi: 'वाचणे', english: 'To read', romanization: 'Vāchane' },
+                            { marathi: 'लिहिणे', english: 'To write', romanization: 'Lihiṇe' },
+                            { marathi: 'झोपणे', english: 'To sleep', romanization: 'Jhopaṇe' },
+                            { marathi: 'उठणे', english: 'To wake up', romanization: 'Uṭhaṇe' },
+                            { marathi: 'पाहणे', english: 'To see', romanization: 'Pāhaṇe' }
+                        ]
+                    }
+                ]
+            },
+            {
+                unit: 4,
+                unitTitle: "Unit 4: Time & Places",
+                unitDescription: "Talk about when and where",
+                lessons: [
+                    {
+                        id: 16,
+                        title: "Days of the Week",
+                        description: "Monday to Sunday",
+                        icon: "📅",
+                        vocab: [
+                            { marathi: 'सोमवार', english: 'Monday', romanization: 'Somavār' },
+                            { marathi: 'मंगळवार', english: 'Tuesday', romanization: 'Mangaḷavār' },
+                            { marathi: 'बुधवार', english: 'Wednesday', romanization: 'Budhavār' },
+                            { marathi: 'गुरुवार', english: 'Thursday', romanization: 'Guruvār' },
+                            { marathi: 'शुक्रवार', english: 'Friday', romanization: 'Śukravār' },
+                            { marathi: 'शनिवार', english: 'Saturday', romanization: 'Śanivār' },
+                            { marathi: 'रविवार', english: 'Sunday', romanization: 'Ravivār' },
+                            { marathi: 'आज', english: 'Today', romanization: 'Āj' },
+                            { marathi: 'उद्या', english: 'Tomorrow', romanization: 'Udyā' },
+                            { marathi: 'काल', english: 'Yesterday', romanization: 'Kāl' }
+                        ]
+                    },
+                    {
+                        id: 17,
+                        title: "Time Words",
+                        description: "Morning, noon, night",
+                        icon: "⏰",
+                        vocab: [
+                            { marathi: 'सकाळ', english: 'Morning', romanization: 'Sakāḷ' },
+                            { marathi: 'दुपार', english: 'Afternoon', romanization: 'Dupār' },
+                            { marathi: 'संध्याकाळ', english: 'Evening', romanization: 'Sandhyākāḷ' },
+                            { marathi: 'रात्र', english: 'Night', romanization: 'Rātr' },
+                            { marathi: 'वेळ', english: 'Time', romanization: 'Veḷ' },
+                            { marathi: 'तास', english: 'Hour', romanization: 'Tās' },
+                            { marathi: 'मिनिट', english: 'Minute', romanization: 'Miniṭ' },
+                            { marathi: 'आठवडा', english: 'Week', romanization: 'Āṭhavaḍā' }
+                        ]
+                    },
+                    {
+                        id: 18,
+                        title: "Question Words",
+                        description: "Who, what, where, when",
+                        icon: "❓",
+                        vocab: [
+                            { marathi: 'काय', english: 'What', romanization: 'Kāy' },
+                            { marathi: 'कोण', english: 'Who', romanization: 'Koṇ' },
+                            { marathi: 'कुठे', english: 'Where', romanization: 'Kuthe' },
+                            { marathi: 'केव्हा', english: 'When', romanization: 'Kevhā' },
+                            { marathi: 'का', english: 'Why', romanization: 'Kā' },
+                            { marathi: 'कसा', english: 'How', romanization: 'Kasā' },
+                            { marathi: 'किती', english: 'How much/many', romanization: 'Kitī' },
+                            { marathi: 'कोणता', english: 'Which', romanization: 'Koṇatā' }
+                        ]
+                    }
+                ]
+            },
+            {
+                unit: 5,
+                unitTitle: "Unit 5: Advanced",
+                unitDescription: "Master directions and complete your journey",
+                lessons: [
+                    {
+                        id: 19,
+                        title: "Directions",
+                        description: "Navigate in Marathi",
+                        icon: "🧭",
+                        vocab: [
+                            { marathi: 'डावीकडे', english: 'Left', romanization: 'Ḍāvīkaḍe' },
+                            { marathi: 'उजवीकडे', english: 'Right', romanization: 'Ujavīkaḍe' },
+                            { marathi: 'सरळ', english: 'Straight', romanization: 'Saraḷ' },
+                            { marathi: 'पुढे', english: 'Forward/Ahead', romanization: 'Pudhe' },
+                            { marathi: 'मागे', english: 'Back', romanization: 'Māge' },
+                            { marathi: 'जवळ', english: 'Near', romanization: 'Javaḷ' },
+                            { marathi: 'लांब', english: 'Far', romanization: 'Lāmb' }
+                        ]
+                    },
+                    {
+                        id: 20,
+                        title: "Places in City",
+                        description: "Schools, hospitals, markets",
+                        icon: "🏪",
+                        vocab: [
+                            { marathi: 'शाळा', english: 'School', romanization: 'Śāḷā' },
+                            { marathi: 'रुग्णालय', english: 'Hospital', romanization: 'Rugṇālay' },
+                            { marathi: 'बाजार', english: 'Market', romanization: 'Bājār' },
+                            { marathi: 'मंदिर', english: 'Temple', romanization: 'Mandir' },
+                            { marathi: 'बँक', english: 'Bank', romanization: 'Bĕnk' },
+                            { marathi: 'पार्क', english: 'Park', romanization: 'Pārk' },
+                            { marathi: 'दुकान', english: 'Shop', romanization: 'Dukān' },
+                            { marathi: 'रेल्वे स्टेशन', english: 'Railway station', romanization: 'Relve Sṭeśan' }
+                        ]
+                    },
+                    {
+                        id: 21,
+                        title: "Final Review",
+                        description: "Master everything!",
+                        icon: "🏆",
+                        vocab: []
+                    }
+                ]
+            }
+        ];
+
+        // State Management
+        let userProgress = {
+            completedLessons: [],
+            currentLesson: 1,
+            totalXP: 0,
+            streak: 0,
+            accuracy: []
+        };
+
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let selectedAnswer = null;
+        let hearts = 3;
+        let correctCount = 0;
+        let wrongCount = 0;
+
+        function loadProgress() {
+            const saved = localStorage.getItem('marathiProgressWordFormation');
+            if (saved) {
+                userProgress = JSON.parse(saved);
+            }
+            updateHeader();
+            updateProgressOverview();
+        }
+
+        function saveProgress() {
+            localStorage.setItem('marathiProgressWordFormation', JSON.stringify(userProgress));
+            updateHeader();
+            updateProgressOverview();
+        }
+
+        function updateHeader() {
+            document.getElementById('streakCount').textContent = userProgress.streak;
+            document.getElementById('xpCount').textContent = userProgress.totalXP;
+        }
+
+        function updateProgressOverview() {
+            document.getElementById('completedLessons').textContent = userProgress.completedLessons.length;
+            document.getElementById('totalXP').textContent = userProgress.totalXP;
+            
+            const accuracy = userProgress.accuracy.length > 0 
+                ? Math.round(userProgress.accuracy.reduce((a, b) => a + b, 0) / userProgress.accuracy.length)
+                : 0;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+        }
+
+        function renderLessons() {
+            const container = document.getElementById('lessonsContainer');
+            container.innerHTML = '';
+
+            lessonData.forEach((unit) => {
+                const unitDiv = document.createElement('div');
+                unitDiv.className = 'lesson-unit';
+                
+                unitDiv.innerHTML = `
+                    <div class="unit-header">
+                        <div class="unit-title">${unit.unitTitle}</div>
+                        <div class="unit-description">${unit.unitDescription}</div>
+                    </div>
+                    <div class="lessons-grid" id="unit-${unit.unit}"></div>
+                `;
+                
+                container.appendChild(unitDiv);
+
+                const lessonsGrid = document.getElementById(`unit-${unit.unit}`);
+                
+                unit.lessons.forEach((lesson) => {
+                    const isCompleted = userProgress.completedLessons.includes(lesson.id);
+                    const isCurrent = lesson.id === userProgress.currentLesson;
+                    const isLocked = lesson.id > userProgress.currentLesson;
+                    
+                    const progress = isCompleted ? 100 : (isCurrent ? 50 : 0);
+                    
+                    let statusClass = '';
+                    if (isCompleted) statusClass = 'completed';
+                    else if (isCurrent) statusClass = 'current';
+                    else if (isLocked) statusClass = 'locked';
+
+                    const lessonDiv = document.createElement('div');
+                    lessonDiv.className = 'lesson-item';
+                    lessonDiv.innerHTML = `
+                        <button class="lesson-button ${statusClass}" onclick="openLesson(${lesson.id})" ${isLocked ? 'disabled' : ''}>
+                            <div class="lesson-icon">${lesson.icon}</div>
+                            <div class="lesson-content">
+                                <div class="lesson-title">${lesson.title}</div>
+                                <div class="lesson-description">${lesson.description}</div>
+                                <div class="lesson-progress">
+                                    <div class="progress-bar-mini">
+                                        <div class="progress-bar-fill" style="width: ${progress}%"></div>
+                                    </div>
+                                    <span class="progress-text">${isCompleted ? 'Done' : (isCurrent ? 'Start' : '🔒')}</span>
+                                </div>
+                            </div>
+                            ${isCompleted ? '<div class="lesson-badge">⭐</div>' : ''}
+                        </button>
+                    `;
+                    
+                    lessonsGrid.appendChild(lessonDiv);
+                });
+            });
+        }
+
+        function openLesson(lessonId) {
+            let lesson = null;
+            for (let unit of lessonData) {
+                const found = unit.lessons.find(l => l.id === lessonId);
+                if (found) {
+                    lesson = found;
+                    break;
+                }
+            }
+
+            if (!lesson) return;
+
+            currentQuiz = generateQuiz(lesson);
+            currentQuestionIndex = 0;
+            selectedAnswer = null;
+            hearts = 3;
+            correctCount = 0;
+            wrongCount = 0;
+
+            document.getElementById('lessonIconLarge').textContent = lesson.icon;
+            document.getElementById('lessonTitleLarge').textContent = lesson.title;
+            document.getElementById('lessonDescriptionLarge').textContent = lesson.description;
+            document.getElementById('questionCount').textContent = currentQuiz.questions.length;
+
+            document.getElementById('quizModal').classList.add('active');
+            showScreen('introScreen');
+        }
+
+        function generateQuiz(lesson) {
+            let vocab = [...lesson.vocab];
+            
+            if (lesson.id === 21) {
+                vocab = [];
+                lessonData.forEach(unit => {
+                    unit.lessons.forEach(l => {
+                        if (l.id < 21 && l.vocab && l.vocab.length > 0) {
+                            vocab = vocab.concat(l.vocab);
+                        }
+                    });
+                });
+                vocab = shuffle(vocab).slice(0, 20);
+            }
+
+            const questions = [];
+
+            vocab.forEach(word => {
+                const wrongOptions1 = shuffle(vocab.filter(w => w !== word)).slice(0, 3).map(w => w.english);
+                questions.push({
+                    type: 'translate',
+                    question: word.marathi,
+                    questionType: 'WHAT IS THIS?',
+                    help: word.romanization,
+                    correct: word.english,
+                    options: shuffle([word.english, ...wrongOptions1])
+                });
+
+                const wrongOptions2 = shuffle(vocab.filter(w => w !== word)).slice(0, 3).map(w => w.marathi);
+                questions.push({
+                    type: 'reverse',
+                    question: word.english,
+                    questionType: 'SELECT THE CORRECT SCRIPT',
+                    help: '',
+                    correct: word.marathi,
+                    options: shuffle([word.marathi, ...wrongOptions2])
+                });
+            });
+
+            return {
+                lessonId: lesson.id,
+                questions: shuffle(questions).slice(0, 12)
+            };
+        }
+
+        function shuffle(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.quiz-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startQuiz() {
+            showScreen('questionScreen');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            
+            document.getElementById('currentQuestionNum').textContent = currentQuestionIndex + 1;
+            document.getElementById('totalQuestions').textContent = currentQuiz.questions.length;
+            document.getElementById('questionType').textContent = question.questionType;
+            
+            if (question.question.match(/[\u0900-\u097F]/)) {
+                document.getElementById('questionText').className = 'question-text devanagari';
+            } else {
+                document.getElementById('questionText').className = 'question-text';
+            }
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionHelp').textContent = question.help;
+
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.getElementById('quizProgressBar').style.width = progress + '%';
+
+            let heartsHTML = '';
+            for (let i = 0; i < hearts; i++) heartsHTML += '❤️';
+            for (let i = hearts; i < 3; i++) heartsHTML += '🖤';
+            document.getElementById('heartsDisplay').innerHTML = heartsHTML;
+
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+            container.className = 'options-container';
+            
+            question.options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-button';
+                if (option.match(/[\u0900-\u097F]/)) {
+                    btn.classList.add('devanagari');
+                }
+                btn.textContent = option;
+                btn.onclick = () => selectOption(btn, option);
+                container.appendChild(btn);
+            });
+
+            selectedAnswer = null;
+            document.getElementById('checkButton').disabled = true;
+        }
+
+        function selectOption(btn, answer) {
+            document.querySelectorAll('.option-button').forEach(b => b.classList.remove('selected'));
+            
+            btn.classList.add('selected');
+            selectedAnswer = answer;
+            document.getElementById('checkButton').disabled = false;
+        }
+
+        function checkAnswer() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const isCorrect = selectedAnswer === question.correct;
+
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === question.correct) {
+                    btn.classList.add('correct');
+                }
+                if (btn.textContent === selectedAnswer && !isCorrect) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            if (isCorrect) {
+                correctCount++;
+            } else {
+                wrongCount++;
+                hearts--;
+            }
+
+            const checkBtn = document.getElementById('checkButton');
+            checkBtn.textContent = 'CONTINUE';
+            checkBtn.onclick = nextQuestion;
+
+            if (hearts === 0) {
+                setTimeout(() => {
+                    showResults();
+                }, 1500);
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex >= currentQuiz.questions.length || hearts === 0) {
+                showResults();
+            } else {
+                const checkBtn = document.getElementById('checkButton');
+                checkBtn.textContent = 'CHECK';
+                checkBtn.onclick = checkAnswer;
+                checkBtn.disabled = true;
+                
+                displayQuestion();
+            }
+        }
+
+        function showResults() {
+            const totalQuestions = currentQuiz.questions.length;
+            const accuracy = Math.round((correctCount / totalQuestions) * 100);
+            const xpEarned = Math.max(20, Math.round(accuracy * 0.6));
+
+            if (!userProgress.completedLessons.includes(currentQuiz.lessonId)) {
+                userProgress.completedLessons.push(currentQuiz.lessonId);
+                if (currentQuiz.lessonId === userProgress.currentLesson) {
+                    userProgress.currentLesson++;
+                }
+            }
+            userProgress.totalXP += xpEarned;
+            userProgress.accuracy.push(accuracy);
+            if (accuracy >= 80) {
+                userProgress.streak++;
+            }
+
+            saveProgress();
+
+            document.getElementById('resultsIcon').textContent = accuracy >= 80 ? '🎉' : '💪';
+            document.getElementById('resultsTitle').textContent = accuracy >= 80 ? 'Lesson Complete!' : 'Keep Practicing!';
+            document.getElementById('resultsMessage').textContent = accuracy >= 80 
+                ? 'Excellent work! You\'re making great progress!' 
+                : 'Don\'t give up! Practice makes perfect.';
+            
+            document.getElementById('xpEarned').textContent = xpEarned;
+            document.getElementById('finalScore').textContent = accuracy;
+            document.getElementById('correctAnswers').textContent = correctCount;
+            document.getElementById('wrongAnswers').textContent = wrongCount;
+
+            showScreen('resultsScreen');
+            
+            if (accuracy >= 80) {
+                createConfetti();
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#58CC02', '#1CB0F6', '#FFD93D', '#FF4B4B', '#FFC800'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        function continueToNext() {
+            closeQuiz();
+            renderLessons();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizModal').classList.remove('active');
+            renderLessons();
+        }
+
+        // Initialize - Load profiles first
+        loadAllProfiles();
+
+        // PWA Install Functionality
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+
+        // Listen for install prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install banner after 3 seconds
+            setTimeout(() => {
+                installBanner.classList.remove('hidden');
+            }, 3000);
+        });
+
+        // Install app
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                    }
+                    deferredPrompt = null;
+                    closeInstallBanner();
+                });
+            } else {
+                // For iOS - show instructions
+                if (isIOS()) {
+                    alert('To install:\n\n1. Tap the Share button ⬆️\n2. Scroll and tap "Add to Home Screen"\n3. Tap "Add" in the top right');
+                }
+            }
+        }
+
+        // Close install banner
+        function closeInstallBanner() {
+            installBanner.classList.add('hidden');
+            localStorage.setItem('installBannerDismissed', 'true');
+        }
+
+        // Check if iOS
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        // Check if already installed
+        function isAppInstalled() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+
+        // Don't show banner if already installed or dismissed
+        if (isAppInstalled() || localStorage.getItem('installBannerDismissed')) {
+            installBanner.classList.add('hidden');
+        }
+
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
